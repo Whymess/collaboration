@@ -6,15 +6,18 @@ let args = process.argv.slice(2);
 
 let file = args;
 
-const fileList = args.filter((item) => {
+const fileList = args.map((item) => {
   return item != ',' && item != '$' && item != '|'
 })
 
-console.log(fileList, "fileList")
-
-const delimeter = args.filter((item) => {
+const delimeter = args.map((item) => {
   return item == ',' || item == '$' || item == '|'
 })
 
-console.log(delimeter, "delimeter")
+if(fileList.length !== 3 || delimeter.length !== 3){
+	console.log("Please pass in correct args")
+	process.exit()
+}
 
+
+console.log(fileList.length )
