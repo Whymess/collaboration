@@ -1,52 +1,71 @@
 var fs = require('fs');
 var parse = require('csv-parse');
-
+var helperFunctions = require('./helpers')
 
 let args = process.argv.slice(2);
 
 let file = args;
+
 
 const fileList = args.filter((item) => {
   return item != ',' && item != '$' && item != '|'
 })
 
 const delimeter = args.filter((item) => {
-  return item == ',' || item == '$' || item == '|'
+  return item === ',' || item === '$' || item === '|'
 })
 
 
-if(fileList.length !== 3){
-	console.log("Please enter 3 source files")
-} 
+fileList.forEach((filename, index) => {
+	 fs.createReadStream(filename).pipe(parse({
+      delimeter: delimeter[index]
+   }, (err, data) => {
+   	    let output = []
+       	switch (delimeter[index]) {
+       		case ',':
+		   			data.forEach((row, index) => {
+		   				row.forEach((element, index) => {
+	   							console.log(output)
+		   				});
+		   			});
 
-if(delimeter.length !== 3){
-	console.log("Please enter 3 delimeters")
-}
+       			break;
 
-if(delimeter.length === 3 && fileList.length === 3){
-	console.log(fileList, "fileList")
-    console.log(delimeter, "delimeter")
-}
+       		case '$':
+       			console.log('dollar')
+       			break;
 
-
-
-
-// console.log(fileList[0], "files")
-
-// if(fileList.length !== 3 || delimeter.length !== 3){
-// 	console.log("Please pass in correct args")
-// 	process.exit()
-// }
-
+       		case '|':
+       			console.log('comma')
 
 
-// fileList.forEach((file, index) => {
-//    const fileDelimeter = delimeter[index];
-//    console.log(fileDelimeter)
-//    // fs.createReadStream(file).pipe(parse({
-//    //    delimeter: fileDelimeter
-//    // }, (err, data) => {
-//    //     console.log("error");
-//    // }));
 
-// });
+
+       			break;
+       		default:
+       			// statements_def
+       			break;
+       	}
+
+
+
+
+
+
+
+
+
+
+
+   }));
+});
+
+
+
+
+
+
+
+
+
+
