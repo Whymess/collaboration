@@ -1,3 +1,5 @@
+pry = require('pryjs')
+
 let move = (array, toBeReplaced, replacer) => {
     return array.map(function(v, k) {
         switch (k) {
@@ -25,7 +27,6 @@ let alphabetical = (arrayOne,arrayTwo) => {
 
 
 let multiLayerSort = (a, b) => {
-
   var o1 = a[2].toLowerCase();
   var o2 = b[2].toLowerCase();
 
@@ -37,6 +38,8 @@ let multiLayerSort = (a, b) => {
   if (o1 > o2) return 1;
   if (p1 < p2) return -1;
   if (p1 > p2) return 1;
+
+
   return 0;
 }
 	 

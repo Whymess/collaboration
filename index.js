@@ -1,7 +1,7 @@
 var fs = require('fs');
 var parse = require('csv-parse');
-var helperFunctions = require('./helpers')
 pry = require('pryjs')
+var myFunctions = require("./helpers")
 
 let args = process.argv.slice(2);
 
@@ -34,9 +34,10 @@ if(delimeter.length !== 3 || fileList.length !== 3){
 }
 
 
-
 // ####################################################
 
+
+let dataStorage = []
 
 
 fileList.forEach((filename, index) => {
@@ -49,32 +50,43 @@ fileList.forEach((filename, index) => {
 	      campusMap.set('SF', 'San Francisco');
 	      campusMap.set('LA', 'Los Angeles');
 
-       let transformedOutput;
-       let logStream;
-
-       	switch (delimeter[index]) {
-       		case ',':
-		   			data.forEach((row, index) => {
+       var output = [];
+       let fileName;
+       switch (delimeter[index]) {
+       	case ',':
+       			let commma = []
+            data.forEach((row, index) => {
 		   				row.forEach((arrayIndex, index) => {
    							 if(!isNaN(Date.parse(arrayIndex))){
 	   							 	if(row.indexOf(arrayIndex) !== 3){
 	                     var fixedRow = row.move(row.move(3,4))
-	                     output.push(fixedRow)
+	                     commma.push(fixedRow)
 	                }
    							 }
 		   				});
 		   			}); 
 
-	   				  transformedOutput = output.join('\n');
+		   			var transformedOutput = commma.join('\n');
 
-						  logStream = fs.createWriteStream('comma_parsed.csv', {'flags': 'a'});
-						  logStream.write(transformedOutput);
-						  logStream.write('\n');
-       			break;
-       		case '$':
-						data.forEach((row, index) => {
-			        row.forEach((arrayIndex, i) => {
-			            let commaRemove;
+					  var logStream = fs.createWriteStream('./output/CommaParsed.csv', {'flags': 'a'});
+					  logStream.write(transformedOutput);
+					  logStream.write('\n');
+
+		   		break;
+		   	case '$':
+		   		let dollarArray = []
+		   		let dollaroutput = []
+		   		data.forEach((row, index) => {
+		   				let rowToString = row.toString()
+		   				let rowToArray = rowToString.split('$')
+		   				dollarArray.push(rowToArray)
+		   		});
+
+		   		dollarArray.forEach((row, index) => {
+		   			row.forEach((arrayIndex, i)  => {
+		   				console.log(arrayIndex)
+
+		   				    let commaRemove;
 			            let index;
 
 			        	  let sf = campusMap.get('SF');
@@ -107,55 +119,67 @@ fileList.forEach((filename, index) => {
 			                if (index > -1) {
 			                   row.splice(index, 1);
 			                }
-			                 output.push(row)
+			                 dollaroutput.push(row)
 			            }
-						    })      
-						})
+		   			});
+		   		});
 
-					  transformedOutput = output.join('\n');
-					  logStream = fs.createWriteStream('dollar_parsed.csv', {'flags': 'a'});
+
+		   		  var transformedOutput = dollaroutput.join('\n');
+
+					  var logStream = fs.createWriteStream('./output/dollarParsed.csv', {'flags': 'a'});
 					  logStream.write(transformedOutput);
 					  logStream.write('\n');
 
+		 
        		break;
+       	case '|': 
 
-       		case '|':
-				      data.forEach((row, index) => {
-				        row.forEach((arrayIndex, i) => {
-				            
-		            if(row[i].length === 1){
-		                 index = row.indexOf(row[i]);
-		                if (index > -1) {
-		                   row.splice(index, 1);
+       		let pipeArray = []
+       		let pipeOutput = []
 
-		                }
-		      
-		                let adjustedRow = myFunctions.move(row, 3, 4)
-		                let transformedDate = adjustedRow[3].split('-').join('/');
-		                adjustedRow.splice(3,1,transformedDate);
-		              
-		             
-		                output.push(adjustedRow)
-			            }
-					    })
-					})
+       		 data.forEach((row, index) => {
+		   				let rowToString = row.toString()
+		   				let rowToArray = rowToString.split('|')
+		   				pipeArray.push(rowToArray)
+		   		});
 
-			    transformedOutput = output.join('\n');
-				  logStream = fs.createWriteStream('pipe_parsed.csv', {'flags': 'a'});
-				  logStream.write(transformedOutput);
-				  logStream.write('\n');
-     			break;
 
-       		default:
-       		
+       		 pipeArray.forEach((row, index) => {
+    					row.forEach((element, i) => {
+    							
+    				 if(row[i].length === 1){
+                 index = row.indexOf(row[i]);
+                if (index > -1) {
+                   row.splice(index, 1);
+
+                }
+      	
+                let adjustedRow = myFunctions.move(row, 3, 4)
+                let transformedDate = adjustedRow[3].split('-').join('/');
+                adjustedRow.splice(3,1,transformedDate);
+              
+             
+                pipeOutput.push(adjustedRow)
+	            }
+			    })
+			})
+
+
+   				
+		   		  var transformedOutput = pipeOutput.join('\n');
+
+					  var logStream = fs.createWriteStream('./output/pipeParsed.csv', {'flags': 'a'});
+					  logStream.write(transformedOutput);
+					  logStream.write('\n');
+
+   	
+       		break
+       	default:
        		break;
-       	}
+       }
    }));
 });
-
-
-
-
 
 
 
