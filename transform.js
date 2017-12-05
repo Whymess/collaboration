@@ -37,13 +37,35 @@ var parser = parse({delimiter: ','},  (err, data) => {
       secondoutput.push(commaRemoved)
    });
    
-   let chunked = secondoutput.join('\n');
+  let chunked = secondoutput.join('\n');
 
-  let logStream = fs.createWriteStream('main.csv', {'flags': 'a'});
+
+  // Third Transformation 
+  let sortedThree = data.sort(myFunctions.alphabetical);
+	let reverseTheSort	=  sortedThree.reverse()
+
+
+	let outputThree = []
+	reverseTheSort.forEach((row, index) => {
+			 let commaRemove;
+			  commaRemove = row.join(' ')
+			  outputThree.push(commaRemove)
+		 
+	})
+
+	let chunkedthree = outputThree.join('\n')
+
+
+
+  let logStream = fs.createWriteStream('output1.csv', {'flags': 'a'});
   logStream.write(firstOutput);
+
+  logStream = fs.createWriteStream('output2.csv', {'flags': 'a'});
   logStream.write(chunked);
  	
 
+  logStream = fs.createWriteStream('output3.csv', {'flags': 'a'});
+  logStream.write(chunkedthree);
 
 
 })
