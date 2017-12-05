@@ -5,6 +5,12 @@ var inputFile='merged.csv';
 var myFunctions = require("./helpers")
 
 
+let thirdTransformation = (data) => {
+   
+
+}
+
+
 var parser = parse({delimiter: ','},  (err, data) => {
 
 
@@ -19,6 +25,11 @@ var parser = parse({delimiter: ','},  (err, data) => {
 	let sorted = dataToBeSorted.sort(myFunctions.multiLayerSort);
 
 	let firstOutput = sorted.join('\n');
+
+	  console.log(firstOutput)
+	   console.log("#########################################")
+   		console.log("#########first Transformation###########")
+    	console.log("#########################################")
 	
 
 	// Second Trans
@@ -38,10 +49,19 @@ var parser = parse({delimiter: ','},  (err, data) => {
    });
    
   let chunked = secondoutput.join('\n');
+  console.log(chunked)
+  console.log("#########################################")
+   console.log("#########Second Transformation###########")
+    console.log("#########################################")
 
 
-  // Third Transformation 
-  let sortedThree = data.sort(myFunctions.alphabetical);
+
+
+
+   let count = 0
+
+
+	let sortedThree = data.sort(myFunctions.alphabetical);
 	let reverseTheSort	=  sortedThree.reverse()
 
 
@@ -56,19 +76,18 @@ var parser = parse({delimiter: ','},  (err, data) => {
 	let chunkedthree = outputThree.join('\n')
 
 
-
-  let logStream = fs.createWriteStream('output1.csv', {'flags': 'a'});
-  logStream.write(firstOutput);
-
-  logStream = fs.createWriteStream('output2.csv', {'flags': 'a'});
-  logStream.write(chunked);
- 	
-
-  logStream = fs.createWriteStream('output3.csv', {'flags': 'a'});
-  logStream.write(chunkedthree);
+	let chunkedThird = secondoutput.join('\n');
+  console.log(chunkedThird)
+  console.log("#########################################")
+   console.log("#########Third Transformation###########")
+    console.log("#########################################")
 
 
+ 
 })
+
+
+
 
 
 
