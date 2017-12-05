@@ -21,28 +21,29 @@ var parser = parse({delimiter: ','},  (err, data) => {
 	let firstOutput = sorted.join('\n');
 	
 
-	// Second Transofmration 
-	let sorted = data.sort(myFunctions.alphabetical);
-	let reverseTheSort	=  sorted.reverse()
-
-
-	let outputTwo = []
-	reverseTheSort.forEach((row, index) => {
-			 let commaRemove;
-			  commaRemove = row.join(' ')
-			  output.push(commaRemove)
-		 
-	})
-
-	console.log(outputTwo)
+	// Second Trans
+	let outPutTwo = data.sort(((index) => {
+	    return (rowOne, rowTwo) => {
+	 	var dateA = new Date(rowOne[index]), dateB = new Date(rowTwo[index]);
+	   		return dateA - dateB;	
+	    };
+	})(3));
 
 
 
+   let secondoutput = []
+   outPutTwo.forEach( function(element, index) {
+      let commaRemoved  = element.join(' ')
+      secondoutput.push(commaRemoved)
+   });
+   
+   let chunked = secondoutput.join('\n');
 
   let logStream = fs.createWriteStream('main.csv', {'flags': 'a'});
   logStream.write(firstOutput);
+  logStream.write(chunked);
+ 	
 
-  
 
 
 })
